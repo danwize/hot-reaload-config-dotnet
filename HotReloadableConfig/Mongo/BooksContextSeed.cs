@@ -13,6 +13,11 @@ public class BooksContextSeed
 
     private static void InsertRecords(IMongoCollection<Book> booksCollection)
     {
+        if (booksCollection.CountDocuments(FilterDefinition<Book>.Empty) > 0)
+        {
+            //don't seed that data if there is already some data in there.
+            return;
+        }
         booksCollection.DeleteMany(_ => true);
         var dan = new Author(Name: "Dan Davis");
         booksCollection.InsertMany(
