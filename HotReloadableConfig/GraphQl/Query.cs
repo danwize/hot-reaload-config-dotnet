@@ -1,5 +1,5 @@
-using HotReloadableConfig.Pocos;
-using HotReloadableConfig.Repositories;
+using HotReloadableConfig.Books;
+using HotReloadableConfig.Books.Pocos;
 
 namespace HotReloadableConfig.GraphQl;
 

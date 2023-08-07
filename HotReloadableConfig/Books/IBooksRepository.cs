@@ -1,6 +1,6 @@
-﻿using HotReloadableConfig.Pocos;
+﻿using HotReloadableConfig.Books.Pocos;
 
-namespace HotReloadableConfig.Repositories;
+namespace HotReloadableConfig.Books;
 
 public interface IBooksRepository
 {

@@ -1,7 +1,7 @@
-using HotReloadableConfig.Pocos;
+using HotReloadableConfig.Books.Pocos;
 using MongoDB.Driver;
 
-namespace HotReloadableConfig.Mongo;
+namespace HotReloadableConfig.Books.Mongo;
 
 public class BooksContextSeed
 {

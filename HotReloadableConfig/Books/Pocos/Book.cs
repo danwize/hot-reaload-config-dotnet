@@ -1,4 +1,4 @@
-namespace HotReloadableConfig.Pocos;
+namespace HotReloadableConfig.Books.Pocos;
 
 public record Book(Guid Id, string Title, Author Author);
 

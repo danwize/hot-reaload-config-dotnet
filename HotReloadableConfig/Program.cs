@@ -1,6 +1,6 @@
+using HotReloadableConfig.Books;
+using HotReloadableConfig.Books.Mongo;
 using HotReloadableConfig.GraphQl;
-using HotReloadableConfig.Mongo;
-using HotReloadableConfig.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

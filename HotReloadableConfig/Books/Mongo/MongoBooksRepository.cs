@@ -1,8 +1,8 @@
-using HotReloadableConfig.Pocos;
-using HotReloadableConfig.Repositories;
+using HotReloadableConfig.Books;
+using HotReloadableConfig.Books.Pocos;
 using MongoDB.Driver;
 
-namespace HotReloadableConfig.Mongo;
+namespace HotReloadableConfig.Books.Mongo;
 
 public class MongoBooksRepository : IBooksRepository
 {
