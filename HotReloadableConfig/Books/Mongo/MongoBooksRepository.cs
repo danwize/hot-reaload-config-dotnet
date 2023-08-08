@@ -1,5 +1,6 @@
-using HotReloadableConfig.Books;
+using HotReloadableConfig.Books.ConfigData;
 using HotReloadableConfig.Books.Pocos;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace HotReloadableConfig.Books.Mongo;
@@ -7,6 +8,8 @@ namespace HotReloadableConfig.Books.Mongo;
 public class MongoBooksRepository : IBooksRepository
 {
     private readonly IMongoBooksClient _mongoBooksClient;
+    private readonly IOptions<BookMetadataConfig> _bookOptions;
+    private BookMetadataConfig BookConfig => _bookOptions.Value;
 
 
     private FilterDefinition<Book> GetByIdFilter(Guid id)
@@ -14,15 +17,22 @@ public class MongoBooksRepository : IBooksRepository
         return Builders<Book>.Filter.Eq(_ => _.Id, id);
     }
 
-    public MongoBooksRepository(IMongoBooksClient mongoBooksClient)
+    public MongoBooksRepository(IMongoBooksClient mongoBooksClient, IOptions<BookMetadataConfig> bookOptions)
     {
         _mongoBooksClient = mongoBooksClient;
+        _bookOptions = bookOptions;
     }
 
     public async Task<Book?> GetByIdAsync(Guid id)
     {
-        // return await _recordContext.Records.Find(GetByIdFilter(deviceId)).FirstOrDefaultAsync();
-        return await _mongoBooksClient.Books.Find(_ => _.Id == id).FirstOrDefaultAsync();
+        var result = await _mongoBooksClient.Books.Find(_ => _.Id == id).FirstOrDefaultAsync();
+
+        if (BookConfig.ShouldAddLastUpdate)
+        {
+            return result with {LastModifiedDate = DateTime.UtcNow};
+        }
+
+        return result;
     }
 
     public async Task<Book> UpdateAsync(Book book)
@@ -32,7 +42,9 @@ public class MongoBooksRepository : IBooksRepository
     }
 
     public async Task<IEnumerable<Book>> GetAllAsync()
-    {
-        return await (await _mongoBooksClient.Books.FindAsync(_ => true)).ToListAsync();
+    { 
+        var result = await (await _mongoBooksClient.Books.FindAsync(_ => true)).ToListAsync();
+
+        return BookConfig.ShouldAddLastUpdate ? result.Select(x => x with {LastModifiedDate = DateTime.UtcNow}) : result;
     }
 }
