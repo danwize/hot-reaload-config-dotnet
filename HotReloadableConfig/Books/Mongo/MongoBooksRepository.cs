@@ -47,4 +47,10 @@ public class MongoBooksRepository : IBooksRepository
 
         return BookConfig.ShouldAddLastUpdate ? result.Select(x => x with {LastModifiedDate = DateTime.UtcNow}) : result;
     }
+
+    public async Task<Book> AddAsync(Book book)
+    {
+        await _mongoBooksClient.Books.InsertOneAsync(book);
+        return book;
+    }
 }

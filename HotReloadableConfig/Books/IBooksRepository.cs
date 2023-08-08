@@ -9,4 +9,6 @@ public interface IBooksRepository
     Task<Book> UpdateAsync(Book book);
     Task<IEnumerable<Book>> GetAllAsync();
 
+    Task<Book> AddAsync(Book book);
+
 }

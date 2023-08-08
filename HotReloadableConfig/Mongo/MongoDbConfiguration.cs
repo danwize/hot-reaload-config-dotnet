@@ -23,7 +23,7 @@ public abstract class MongoCollectionClient<T>
     protected MongoClient Client { get; }
     protected IMongoDatabase Database { get; }
 
-    protected IMongoCollection<T> Collection { get; }
+    public IMongoCollection<T> Collection { get; }
 
     protected MongoCollectionClient(IOptions<MongoDbConfiguration> config)
     {
