@@ -37,7 +37,9 @@ public class MongoBooksRepository : IBooksRepository
 
     public async Task<Book> UpdateAsync(Book book)
     {
-        var updateDefinition = Builders<Book>.Update.Set(_ => _.Title, book.Title);
+        var updateDefinition = Builders<Book>.Update
+            .Set(_ => _.Title, book.Title)
+            .Set(_ => _.Author, book.Author);
         return await _mongoBooksClient.Books.FindOneAndUpdateAsync(GetByIdFilter(book.Id), updateDefinition, new FindOneAndUpdateOptions<Book, Book> { ReturnDocument = ReturnDocument.After });
     }
 
@@ -53,4 +55,6 @@ public class MongoBooksRepository : IBooksRepository
         await _mongoBooksClient.Books.InsertOneAsync(book);
         return book;
     }
+
+
 }

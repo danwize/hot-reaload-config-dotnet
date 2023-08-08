@@ -1,6 +1,7 @@
 using HotReloadableConfig.Books.Pocos;
 using HotReloadableConfig.Mongo;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 

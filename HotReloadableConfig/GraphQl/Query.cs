@@ -8,7 +8,7 @@ namespace HotReloadableConfig.GraphQl;
 public class Query
 {
     public Task<Book?> GetBookById([Service] IBooksRepository booksBooksRepository, Guid id) => booksBooksRepository.GetByIdAsync(id);
-    [UsePaging(MaxPageSize = 1)]
+    [UsePaging]
     // [UseProjection]
     [UseSorting]
     [UseFiltering]
