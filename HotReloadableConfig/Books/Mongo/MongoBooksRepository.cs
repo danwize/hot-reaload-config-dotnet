@@ -8,8 +8,8 @@ namespace HotReloadableConfig.Books.Mongo;
 public class MongoBooksRepository : IBooksRepository
 {
     private readonly IMongoBooksClient _mongoBooksClient;
-    private readonly IOptions<BookMetadataConfig> _bookOptions;
-    private BookMetadataConfig BookConfig => _bookOptions.Value;
+    private readonly IOptionsMonitor<BookMetadataConfig> _bookOptions;
+    private BookMetadataConfig BookConfig => _bookOptions.CurrentValue;
 
 
     private FilterDefinition<Book> GetByIdFilter(Guid id)
@@ -17,7 +17,7 @@ public class MongoBooksRepository : IBooksRepository
         return Builders<Book>.Filter.Eq(_ => _.Id, id);
     }
 
-    public MongoBooksRepository(IMongoBooksClient mongoBooksClient, IOptions<BookMetadataConfig> bookOptions)
+    public MongoBooksRepository(IMongoBooksClient mongoBooksClient, IOptionsMonitor<BookMetadataConfig> bookOptions)
     {
         _mongoBooksClient = mongoBooksClient;
         _bookOptions = bookOptions;

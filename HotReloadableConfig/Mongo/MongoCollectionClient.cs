@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
@@ -7,52 +8,56 @@ public abstract class MongoCollectionClient<T>
 {
     protected string CollectionName { get; }
     protected MongoDbConfiguration DbConfig => _dbConfig.Value;
+    private bool _isInitialized = false;
 
     private readonly IOptions<MongoDbConfiguration> _dbConfig;
     protected abstract List<T> SeedRecords { get; }
 
+    private readonly IMongoCollection<T> _collection;
 
 
     protected MongoClient Client { get; }
     protected IMongoDatabase Database { get; }
 
-    public IMongoCollection<T> Collection { get; }
+
+    public IMongoCollection<T> Collection
+    {
+        get
+        {
+            if (_isInitialized) return _collection;
+            SeedData();
+            _isInitialized = true;
+            return _collection;
+        }
+    }
 
     protected MongoCollectionClient(IOptions<MongoDbConfiguration> config)
     {
+        //do the object init stuff before connecting to the database
+        // mongoConventionRegistration();
         _dbConfig = config;
         Client = new MongoClient(DbConfig.ConnectionString);
         CollectionName = string.IsNullOrWhiteSpace(config.Value.CollectionName) ? 
             $"{typeof(T).Name}s" : 
             config.Value.CollectionName;
         Database = Client.GetDatabase(DbConfig.Database);
-        Collection = Database.GetCollection<T>(CollectionName);
+        _collection = Database.GetCollection<T>(CollectionName);
 
-        Init();
-        // SeedData();
 
     }
 
-    //moved 
-    private void Init()
-    {
-        //todo: moved ths virtual cal to an init function because of a warning about virtual call in constructor.  I think that doesn't solve the problem???
-        //initial testing shows it is ok.
-        SeedData();
-    }
+    private 
 
     protected virtual void SeedData()
     {
-        if(Collection.CountDocuments(FilterDefinition<T>.Empty) > 0)
+        if(_collection.CountDocuments(FilterDefinition<T>.Empty) > 0)
         {
             //don't seed that data if there is already some data in there.
             return;
         }
 
-        Collection.DeleteMany(_ => true);
-        Collection.InsertMany(SeedRecords);
-
-
+        // _collection.DeleteMany(_ => true);
+        _collection.InsertMany(SeedRecords);
     }
 
 }
