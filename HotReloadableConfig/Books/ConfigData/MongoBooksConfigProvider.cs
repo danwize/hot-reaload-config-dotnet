@@ -1,5 +1,6 @@
 ﻿namespace HotReloadableConfig.Books.ConfigData;
 
+//https://andrewlock.net/reloading-strongly-typed-options-in-asp-net-core-1-1-0/#if-you-don-t-like-to-use-ioptions
 public class MongoBooksConfigProvider : ConfigurationProvider
 {
     private readonly IBookMetadataConfigRepository _configRepository;
@@ -12,7 +13,8 @@ public class MongoBooksConfigProvider : ConfigurationProvider
 
     public override void Load()
     {
-        var data = _configRepository.GetConfig().AsDictionary(keyPrefix:$"{nameof(BookMetadataConfig)}:");
+        var data = _configRepository.GetConfig()
+            .AsDictionary(keyPrefix:$"{nameof(BookMetadataConfig)}:");
         Data = data;
     }
 

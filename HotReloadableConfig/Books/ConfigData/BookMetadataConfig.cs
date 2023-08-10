@@ -12,9 +12,9 @@ public record BookMetadataConfig
 
     public BookMetadataConfig()
     {
-
+    
     }
 
-    public Guid Id { get; set; }
-    public bool ShouldAddLastUpdate { get; set; }
+    public Guid Id { get; init; }
+    public bool ShouldAddLastUpdate { get; init; }
 }
